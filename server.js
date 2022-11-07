@@ -24,25 +24,90 @@ const db = mysql.createConnection(
 const start = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     if (answers.next === "Add a department") {
-      db.query("SELECT * FROM students", function (err, results) {
-        console.log(results);
-      });
       //Need to push to array
-      start(prompts.addDepartment);
+      dept(prompts.addDepartment);
     } else if (answers.next === "Add a role") {
-      db.query("SELECT * FROM students", function (err, results) {
-        console.log(results);
-      });
       //Need to push to array
-      start(prompts.addRole);
-    } else if (answers.next === "add an employee") {
-      db.query("SELECT * FROM students", function (err, results) {
-        console.log(results);
-      });
+      role(prompts.addRole);
+    } else if (answers.next === "Add an employee") {
       //Need to push to array
-      start(prompts.addEmployee);
+      emp(prompts.addEmployee);
+    } else if (answers.next === "View all departments") {
+      viewDept(answers);
+    } else if (answers.next === "View all roles") {
+      viewRole(answers);
+    } else if (answers.next === "View all employees") {
+      viewEmp(answers);
     }
   });
 };
+
+const dept = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query(
+      "INSERT INTO (department) values" + answers,
+      function (err, results) {
+        if (err) throw err;
+        console.log(results);
+      }
+    );
+    start(prompts.introQuestion);
+  });
+};
+
+const role = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query("INSERT INTO (role) values" + answers, function (err, results) {
+      if (err) throw err;
+      console.log(results);
+    });
+    start(prompts.introQuestion);
+  });
+};
+
+const emp = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query(
+      "INSERT INTO (employee) values" + answers,
+      function (err, results) {
+        if (err) throw err;
+        console.log(results);
+      }
+    );
+    start(prompts.introQuestion);
+  });
+};
+
+const viewDept = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query("SELECT * FROM department", function (err, results) {
+      if (err) throw err;
+      console.log(results);
+    });
+    start(prompts.introQuestion);
+  });
+};
+const viewRole = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query("SELECT * FROM role", function (err, results) {
+      if (err) throw err;
+      console.log(results);
+    });
+    start(prompts.introQuestion);
+  });
+};
+const viewEmp = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query("SELECT * FROM employee", function (err, results) {
+      if (err) throw err;
+      console.log(results);
+    });
+    start(prompts.introQuestion);
+  });
+};
+
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
+);
 
 start(prompts.introQuestion);
