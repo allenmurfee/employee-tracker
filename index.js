@@ -3,8 +3,6 @@ const inquirer = require("inquirer");
 const express = require("express");
 const prompts = require("./questions");
 
-const app = express();
-
 const db = mysql.createConnection(
   {
     host: "localhost",
@@ -19,20 +17,18 @@ const db = mysql.createConnection(
 
 const start = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    if (answers.next === "Add a department") {
-      //Need to push to array
+    console.log(answers)
+    if (answers.select === "Add a department") {
       dept(prompts.addDepartment);
-    } else if (answers.next === "Add a role") {
-      //Need to push to array
+    } else if (answers.select === "Add a role") {
       role(prompts.addRole);
-    } else if (answers.next === "Add an employee") {
-      //Need to push to array
+    } else if (answers.select === "Add an employee") {
       emp(prompts.addEmployee);
-    } else if (answers.next === "View all departments") {
+    } else if (answers.select === "View all departments") {
       viewDept();
-    } else if (answers.next === "View all roles") {
+    } else if (answers.select === "View all roles") {
       viewRole();
-    } else if (answers.next === "View all employees") {
+    } else if (answers.select === "View all employees") {
       viewEmp();
     }
   });
@@ -75,6 +71,7 @@ const emp = (questions) => {
 };
 
 const viewDept = () => {
+  console.log("viewdept firing");
   db.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
     console.table(results);
@@ -102,9 +99,5 @@ const viewEmp = () => {
     }
   );
 };
-
-app.listen(PORT, () =>
-  console.log(`App listening at http://localhost:${PORT} 🚀`)
-);
 
 start(prompts.introQuestion);
