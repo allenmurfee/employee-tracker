@@ -14,7 +14,7 @@ VALUES
     ("Human Resources Director", 100000, 4),
     ("Accounting Coordinator", 50000, 5),
     ("IT Director", 120000, 6),
-    ("Accounting Director", 100000, 7)
+    ("Accounting Director", 100000, 7);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
@@ -24,4 +24,4 @@ VALUES
     ("Brad", "Jones", 1, 4),
     ("Jessica", "Smith", 2, 6),
     ("Jake", "Miller", 3, 6),
-    ("Albert", "Jones", 5, 7)
+    ("Albert", "Jones", 5, 7);

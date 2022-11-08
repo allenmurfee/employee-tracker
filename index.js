@@ -4,10 +4,6 @@ const express = require("express");
 const prompts = require("./questions");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 const db = mysql.createConnection(
   {
@@ -33,11 +29,11 @@ const start = (questions) => {
       //Need to push to array
       emp(prompts.addEmployee);
     } else if (answers.next === "View all departments") {
-      viewDept(answers);
+      viewDept();
     } else if (answers.next === "View all roles") {
-      viewRole(answers);
+      viewRole();
     } else if (answers.next === "View all employees") {
-      viewEmp(answers);
+      viewEmp();
     }
   });
 };
@@ -78,32 +74,33 @@ const emp = (questions) => {
   });
 };
 
-const viewDept = (questions) => {
-  inquirer.prompt(questions).then((answers) => {
-    db.query("SELECT * FROM department", function (err, results) {
-      if (err) throw err;
-      console.log(results);
-    });
-    start(prompts.introQuestion);
+const viewDept = () => {
+  db.query("SELECT * FROM department", function (err, results) {
+    if (err) throw err;
+    console.table(results);
   });
+  start(prompts.introQuestion);
 };
-const viewRole = (questions) => {
-  inquirer.prompt(questions).then((answers) => {
-    db.query("SELECT * FROM role", function (err, results) {
+const viewRole = () => {
+  db.query(
+    "SELECT role.id, role.title, role.salary, department.title FROM role JOIN department ON role.department_id = department.id",
+    function (err, results) {
       if (err) throw err;
-      console.log(results);
-    });
-    start(prompts.introQuestion);
-  });
+      console.table(results);
+    }
+  );
+  start(prompts.introQuestion);
 };
-const viewEmp = (questions) => {
-  inquirer.prompt(questions).then((answers) => {
-    db.query("SELECT * FROM employee", function (err, results) {
+const viewEmp = () => {
+  db.query(
+    "SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.title, role.salary, department.title FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id",
+    function (err, results) {
       if (err) throw err;
-      console.log(results);
-    });
-    start(prompts.introQuestion);
-  });
+      console.table(results);
+
+      start(prompts.introQuestion);
+    }
+  );
 };
 
 app.listen(PORT, () =>
