@@ -34,7 +34,7 @@ const addRole = [
   },
   {
     type: "input",
-    message: "Enter the department that the role is in",
+    message: "Enter the department ID",
     name: "roleDepartment",
   },
 ];
@@ -52,12 +52,12 @@ const addEmployee = [
   },
   {
     type: "input",
-    message: "Enter the employee's role",
+    message: "Enter the employee's role ID",
     name: "employeeRole",
   },
   {
     type: "input",
-    message: "Enter the employee's manager",
+    message: "Enter the employee's manager ID",
     name: "employeeManager",
   },
 ];

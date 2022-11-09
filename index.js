@@ -1,6 +1,5 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const express = require("express");
 const prompts = require("./questions");
 
 const db = mysql.createConnection(
@@ -42,13 +41,14 @@ const dept = (questions) => {
     );
     start(prompts.introQuestion);
   });
-}
+};
 
 const role = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     console.log(answers);
     db.query(
-      `INSERT INTO (role) VALUES ("${answers.roleName}", ${answers.roleSalary}, "${answers.roleDepartment}")`
+      "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+      [answers.roleName, answers.roleSalary, answers.roleDepartment]
     );
     start(prompts.introQuestion);
   });
@@ -58,16 +58,13 @@ const emp = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     console.log(answers);
     db.query(
-      "INSERT INTO (employee) VALUES ?",
+      "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
       [
         answers.employeeFirstName,
         answers.employeeLastName,
         answers.employeeRole,
         answers.employeeManager,
-      ],
-      function (err, results) {
-        if (err) throw err;
-      }
+      ]
     );
     start(prompts.introQuestion);
   });
@@ -80,6 +77,7 @@ const viewDept = () => {
   });
   start(prompts.introQuestion);
 };
+
 const viewRole = () => {
   db.query(
     "SELECT role.id, role.title, role.salary, department.title FROM role JOIN department ON role.department_id = department.id",
