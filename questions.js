@@ -11,6 +11,7 @@ const introQuestion = [
       "Add a role",
       "Add an employee",
       "Update an employee role",
+      "Quit"
     ],
   },
 ];
@@ -62,4 +63,22 @@ const addEmployee = [
   },
 ];
 
-module.exports = { introQuestion, addDepartment, addRole, addEmployee };
+const updateEmployee = [
+  {
+    type: "input",
+    message: "What is the first name of the employee you'd like to update?",
+    name: "empFirstName",
+  },
+  {
+    type: "input",
+    message: "What is the last name of the employee you'd like to update?",
+    name: "empLastName",
+  },
+  {
+    type: "input",
+    message: "Enter the employee's new role ID",
+    name: "empNewRole",
+  },
+];
+
+module.exports = { introQuestion, addDepartment, addRole, addEmployee, updateEmployee };

@@ -29,6 +29,11 @@ const start = (questions) => {
       viewRole();
     } else if (answers.select === "View all employees") {
       viewEmp();
+    } else if (answers.select === "Update an employee role") {
+      updateEmp(prompts.updateEmployee);
+    } else {
+      console.log("Quitting application");
+      return;
     }
   });
 };
@@ -98,6 +103,16 @@ const viewEmp = () => {
       start(prompts.introQuestion);
     }
   );
+};
+
+const updateEmp = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    db.query(
+      "UPDATE EMPLOYEE SET ROLE_ID = ? WHERE FIRST_NAME = ? AND LAST_NAME = ?",
+      [answers.empNewRole, answers.empFirstName, answers.empLastName]
+    );
+  });
+  start(prompts.introQuestion);
 };
 
 start(prompts.introQuestion);
