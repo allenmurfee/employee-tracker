@@ -1,5 +1,3 @@
-const inquirer = require("inquirer");
-
 const introQuestion = [
   {
     type: "list",

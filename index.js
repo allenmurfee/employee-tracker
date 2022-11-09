@@ -17,7 +17,7 @@ const db = mysql.createConnection(
 
 const start = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    console.log(answers)
+    console.log(answers);
     if (answers.select === "Add a department") {
       dept(prompts.addDepartment);
     } else if (answers.select === "Add a role") {
@@ -36,43 +36,51 @@ const start = (questions) => {
 
 const dept = (questions) => {
   inquirer.prompt(questions).then((answers) => {
+    console.log(answers.addDepartment);
     db.query(
-      "INSERT INTO (department) values" + answers,
-      function (err, results) {
-        if (err) throw err;
-        console.log(results);
-      }
+      "INSERT INTO (department) VALUES ?",
+      answers.addDepartment,
     );
     start(prompts.introQuestion);
   });
 };
 
-const role = (questions) => {
-  inquirer.prompt(questions).then((answers) => {
-    db.query("INSERT INTO (role) values" + answers, function (err, results) {
-      if (err) throw err;
-      console.log(results);
-    });
-    start(prompts.introQuestion);
-  });
-};
+// const role = (questions) => {
+//   inquirer.prompt(questions).then((answers) => {
+//     console.log(answers);
+//     db.query(
+//       "INSERT INTO (role) VALUES ?",
+//       [answers.roleName, answers.roleSalary, answers.roleDepartment],
+//       (err, results) => {
+//         if (err) throw err;
+//         console.log(results);
+//       }
+//     );
+//     start(prompts.introQuestion);
+//   });
+// };
 
-const emp = (questions) => {
-  inquirer.prompt(questions).then((answers) => {
-    db.query(
-      "INSERT INTO (employee) values" + answers,
-      function (err, results) {
-        if (err) throw err;
-        console.log(results);
-      }
-    );
-    start(prompts.introQuestion);
-  });
-};
+// const emp = (questions) => {
+//   inquirer.prompt(questions).then((answers) => {
+//     console.log(answers);
+//     db.query(
+//       "INSERT INTO (employee) VALUES ?",
+//       [
+//         answers.employeeFirstName,
+//         answers.employeeLastName,
+//         answers.employeeRole,
+//         answers.employeeManager,
+//       ],
+//       function (err, results) {
+//         if (err) throw err;
+//       }
+//     );
+//     start(prompts.introQuestion);
+//   });
+// };
 
 const viewDept = () => {
-  console.log("viewdept firing");
-  db.query("SELECT * FROM department", function (err, results) {
+  db.query("SELECT * FROM DEPARTMENT", function (err, results) {
     if (err) throw err;
     console.table(results);
   });
