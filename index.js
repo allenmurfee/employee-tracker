@@ -16,7 +16,6 @@ const db = mysql.createConnection(
 
 const start = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    console.log(answers);
     if (answers.select === "Add a department") {
       dept(prompts.addDepartment);
     } else if (answers.select === "Add a role") {
@@ -33,14 +32,13 @@ const start = (questions) => {
       updateEmp(prompts.updateEmployee);
     } else {
       console.log("Quitting application");
-      return;
+      process.exit(0);
     }
   });
 };
 
 const dept = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    console.log(answers.addDepartment);
     db.query(
       `INSERT INTO department (title) VALUES ('${answers.addDepartment}')`
     );
@@ -50,7 +48,6 @@ const dept = (questions) => {
 
 const role = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    console.log(answers);
     db.query(
       "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
       [answers.roleName, answers.roleSalary, answers.roleDepartment]
@@ -61,7 +58,6 @@ const role = (questions) => {
 
 const emp = (questions) => {
   inquirer.prompt(questions).then((answers) => {
-    console.log(answers);
     db.query(
       "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
       [
@@ -85,7 +81,7 @@ const viewDept = () => {
 
 const viewRole = () => {
   db.query(
-    "SELECT role.id, role.title, role.salary, department.title FROM role JOIN department ON role.department_id = department.id",
+    "SELECT role.id, role.title AS role_title, role.salary, department.title AS department_title FROM role JOIN department ON role.department_id = department.id",
     function (err, results) {
       if (err) throw err;
       console.table(results);
@@ -106,10 +102,12 @@ const viewEmp = () => {
 };
 
 const updateEmp = (questions) => {
+  console.log("\n");
   inquirer.prompt(questions).then((answers) => {
+    console.log("/n");
     db.query(
-      "UPDATE EMPLOYEE SET ROLE_ID = ? WHERE FIRST_NAME = ? AND LAST_NAME = ?",
-      [answers.empNewRole, answers.empFirstName, answers.empLastName]
+      `UPDATE EMPLOYEE SET ROLE_ID = ${answers.empNewRole} WHERE FIRST_NAME = ${answers.empFirstName} AND LAST_NAME = ${answers.empLastName}`
+      // [answers.empNewRole, answers.empFirstName` answers.empLastName]
     );
   });
   start(prompts.introQuestion);
