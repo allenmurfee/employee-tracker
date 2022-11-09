@@ -40,9 +40,11 @@ const start = (questions) => {
 const dept = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     db.query(
-      `INSERT INTO department (title) VALUES ('${answers.addDepartment}')`
+      `INSERT INTO department (title) VALUES ('${answers.addDepartment}')`,
+      function (err, results) {
+        start(prompts.introQuestion);
+      }
     );
-    start(prompts.introQuestion);
   });
 };
 
@@ -50,9 +52,11 @@ const role = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     db.query(
       "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
-      [answers.roleName, answers.roleSalary, answers.roleDepartment]
+      [answers.roleName, answers.roleSalary, answers.roleDepartment],
+      function (err, results) {
+        start(prompts.introQuestion);
+      }
     );
-    start(prompts.introQuestion);
   });
 };
 
@@ -65,9 +69,11 @@ const emp = (questions) => {
         answers.employeeLastName,
         answers.employeeRole,
         answers.employeeManager,
-      ]
+      ],
+      function (err, results) {
+        start(prompts.introQuestion);
+      }
     );
-    start(prompts.introQuestion);
   });
 };
 
@@ -75,8 +81,8 @@ const viewDept = () => {
   db.query("SELECT * FROM DEPARTMENT", function (err, results) {
     if (err) throw err;
     console.table(results);
+    start(prompts.introQuestion);
   });
-  start(prompts.introQuestion);
 };
 
 const viewRole = () => {
@@ -85,17 +91,16 @@ const viewRole = () => {
     function (err, results) {
       if (err) throw err;
       console.table(results);
+      start(prompts.introQuestion);
     }
   );
-  start(prompts.introQuestion);
 };
 const viewEmp = () => {
   db.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.title, role.salary, department.title FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id",
+    "SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.id AS role_id, role.title AS role_title, role.salary, department.title FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id",
     function (err, results) {
       if (err) throw err;
       console.table(results);
-
       start(prompts.introQuestion);
     }
   );
@@ -104,13 +109,21 @@ const viewEmp = () => {
 const updateEmp = (questions) => {
   console.log("\n");
   inquirer.prompt(questions).then((answers) => {
-    console.log("/n");
+    console.log("\n");
     db.query(
-      `UPDATE EMPLOYEE SET ROLE_ID = ${answers.empNewRole} WHERE FIRST_NAME = ${answers.empFirstName} AND LAST_NAME = ${answers.empLastName}`
-      // [answers.empNewRole, answers.empFirstName` answers.empLastName]
+      `UPDATE EMPLOYEE SET ROLE_ID = ${answers.empNewRole} WHERE FIRST_NAME = "${answers.empFirstName}" AND LAST_NAME = "${answers.empLastName}"`,
+      function (err, results) {
+        if (err) throw err;
+        db.query(
+          "SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.id AS role_id, role.title AS role_title, role.salary, department.title FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id",
+          function (err, results) {
+            console.table(results);
+            start(prompts.introQuestion);
+          }
+        );
+      }
     );
   });
-  start(prompts.introQuestion);
 };
 
 start(prompts.introQuestion);
