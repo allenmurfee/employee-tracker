@@ -38,8 +38,7 @@ const dept = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     console.log(answers.addDepartment);
     db.query(
-      "INSERT INTO (department) VALUES ?",
-      answers.addDepartment,
+      `INSERT INTO (department) VALUES ${answers.addDepartment}`
     );
     start(prompts.introQuestion);
   });
