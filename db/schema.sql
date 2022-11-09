@@ -1,4 +1,4 @@
-drop database if exists company_db;
+DROP database if exists company_db;
 create database company_db;
 
 use company_db;
@@ -11,7 +11,7 @@ title VARCHAR(30)
 CREATE TABLE role (
 id INT PRIMARY KEY AUTO_INCREMENT,
 title VARCHAR(30),
-salary DECIMAL,
+salary INT,
 department_id INT,
 FOREIGN KEY (department_id) REFERENCES department (id) ON DELETE CASCADE
 );

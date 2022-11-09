@@ -38,45 +38,40 @@ const dept = (questions) => {
   inquirer.prompt(questions).then((answers) => {
     console.log(answers.addDepartment);
     db.query(
-      `INSERT INTO (department) VALUES ${answers.addDepartment}`
+      `INSERT INTO department (title) VALUES ('${answers.addDepartment}')`
+    );
+    start(prompts.introQuestion);
+  });
+}
+
+const role = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    console.log(answers);
+    db.query(
+      `INSERT INTO (role) VALUES ("${answers.roleName}", ${answers.roleSalary}, "${answers.roleDepartment}")`
     );
     start(prompts.introQuestion);
   });
 };
 
-// const role = (questions) => {
-//   inquirer.prompt(questions).then((answers) => {
-//     console.log(answers);
-//     db.query(
-//       "INSERT INTO (role) VALUES ?",
-//       [answers.roleName, answers.roleSalary, answers.roleDepartment],
-//       (err, results) => {
-//         if (err) throw err;
-//         console.log(results);
-//       }
-//     );
-//     start(prompts.introQuestion);
-//   });
-// };
-
-// const emp = (questions) => {
-//   inquirer.prompt(questions).then((answers) => {
-//     console.log(answers);
-//     db.query(
-//       "INSERT INTO (employee) VALUES ?",
-//       [
-//         answers.employeeFirstName,
-//         answers.employeeLastName,
-//         answers.employeeRole,
-//         answers.employeeManager,
-//       ],
-//       function (err, results) {
-//         if (err) throw err;
-//       }
-//     );
-//     start(prompts.introQuestion);
-//   });
-// };
+const emp = (questions) => {
+  inquirer.prompt(questions).then((answers) => {
+    console.log(answers);
+    db.query(
+      "INSERT INTO (employee) VALUES ?",
+      [
+        answers.employeeFirstName,
+        answers.employeeLastName,
+        answers.employeeRole,
+        answers.employeeManager,
+      ],
+      function (err, results) {
+        if (err) throw err;
+      }
+    );
+    start(prompts.introQuestion);
+  });
+};
 
 const viewDept = () => {
   db.query("SELECT * FROM DEPARTMENT", function (err, results) {
