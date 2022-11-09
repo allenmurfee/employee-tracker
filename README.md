@@ -14,9 +14,9 @@ To install this project, please download the GitHub repository.
 
 After installing the GitHub repository, you will need to run a MySQL server and source the schema and seed files to use the database and insert data. Open the terminal and run with "Node index."
 
-![Project screenshot](./assets/screenshot.png)
+![Project screenshot](./Assets/screenshot.png)
 
-Additionally, here is a [tutorial video](./assets/screen_recording.mov) to demonstrate how the application works.
+Additionally, here is a [tutorial video](./Assets/screen_recording.mov) to demonstrate how the application works.
 
 ## Credits
 
